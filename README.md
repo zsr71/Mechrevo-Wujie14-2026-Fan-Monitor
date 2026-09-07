@@ -1,6 +1,21 @@
-# MECHREVO WUJIE 14 2026 Fan Monitor
+<div align="center">
+  <img src="assets/icon.png" alt="MECHREVO WUJIE 14 2026 Fan Monitor 图标" width="128">
+  <h1>MECHREVO WUJIE 14 2026 Fan Monitor</h1>
+  <p>机械革命无界 14 2026 风扇转速与性能模式只读监视器</p>
+  <p><strong>简体中文</strong> · <a href="README.en.md">English</a></p>
+  <p>
+    <a href="https://github.com/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor/releases"><img src="https://img.shields.io/github/v/release/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor?include_prereleases&label=release" alt="Release"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor" alt="MIT License"></a>
+    <img src="https://img.shields.io/badge/platform-Windows%2011-0078D4" alt="Windows 11">
+    <img src="https://img.shields.io/badge/safety-read--only-00A86B" alt="Read-only">
+  </p>
+</div>
 
-机械革命无界 14 2026 风扇转速与性能模式只读监视器。
+<p align="center">
+  <img src="assets/banner.png" alt="双风扇 RPM 遥测横幅" width="100%">
+</p>
+
+本项目通过厂商 BIOS WMI 接口读取机械革命无界 14 2026 的双风扇实际转速和固件性能模式，不安装 EC 访问驱动，也不修改风扇或性能设置。
 
 项目目前在以下机器上验证：
 

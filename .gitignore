@@ -3,6 +3,7 @@
 
 !.gitignore
 !README.md
+!README.en.md
 !CHANGELOG.md
 !SECURITY.md
 !FAN_CONTROL_RESEARCH_NOTES.md
@@ -14,9 +15,10 @@
 !.github/**
 !scripts/
 !scripts/**
+!assets/
+!assets/**
 
 # Release output is generated locally and attached to GitHub Releases.
 dist/
 
-# Add LICENSE to the allowlist after the owner chooses one.
 !LICENSE

@@ -44,10 +44,13 @@ $releaseFiles = @(
     'fan_rpm_monitor.ps1',
     'fan_rpm_live_worker.ps1',
     'README.md',
+    'README.en.md',
     'LICENSE',
     'CHANGELOG.md',
     'SECURITY.md',
-    'FAN_CONTROL_RESEARCH_NOTES.md'
+    'FAN_CONTROL_RESEARCH_NOTES.md',
+    'assets\icon.png',
+    'assets\banner.png'
 )
 
 foreach ($relativePath in $releaseFiles) {
@@ -55,7 +58,12 @@ foreach ($relativePath in $releaseFiles) {
     if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
         throw "Release input is missing: $sourcePath"
     }
-    Copy-Item -LiteralPath $sourcePath -Destination $stageRoot
+    $destinationPath = Join-Path $stageRoot $relativePath
+    $destinationDirectory = Split-Path -Parent $destinationPath
+    if (-not (Test-Path -LiteralPath $destinationDirectory)) {
+        New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
+    }
+    Copy-Item -LiteralPath $sourcePath -Destination $destinationPath
 }
 
 [IO.File]::WriteAllText(
