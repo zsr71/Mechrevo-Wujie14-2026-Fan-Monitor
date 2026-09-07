@@ -1,0 +1,22 @@
+# Public-repository allowlist. Everything else in this research workspace stays local.
+*
+
+!.gitignore
+!README.md
+!CHANGELOG.md
+!SECURITY.md
+!FAN_CONTROL_RESEARCH_NOTES.md
+!Fan RPM Monitor.cmd
+!fan_rpm_monitor.ps1
+!fan_rpm_live_worker.ps1
+
+!.github/
+!.github/**
+!scripts/
+!scripts/**
+
+# Release output is generated locally and attached to GitHub Releases.
+dist/
+
+# Add LICENSE to the allowlist after the owner chooses one.
+!LICENSE
