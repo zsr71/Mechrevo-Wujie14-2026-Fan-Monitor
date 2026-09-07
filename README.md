@@ -15,17 +15,45 @@
   <img src="assets/banner.png" alt="双风扇 RPM 遥测横幅" width="100%">
 </p>
 
-本项目通过厂商 BIOS WMI 接口读取机械革命无界 14 2026 的双风扇实际转速和固件性能模式，不安装 EC 访问驱动，也不修改风扇或性能设置。
+本项目通过厂商 BIOS WMI 接口读取机械革命 / MECHREVO 无界 14 2026（WUJIE 14 2026）的双风扇实际转速和固件性能模式，不安装 EC 访问驱动，也不修改风扇或性能设置。
 
-项目目前在以下机器上验证：
+> [!IMPORTANT]
+> 当前版本是**只读监视器**，不是风扇控制器。它不会设置风扇转速、风扇曲线、性能模式或功耗限制。
 
-- 机型：MECHREVO WUJIE 14 2026
-- 主板：`WUJIE Series-Lark4-LNL`
-- 平台：Intel Lunar Lake
-- BIOS：`EM_LNL326_V1.0.19`
-- 操作系统：Windows 11，支持现代待机
+## 30 秒了解
 
-其他机型、主板版本和 BIOS 版本尚未验证。程序检测不到对应 WMI 接口时应停止，不应尝试套用其他机型的 EC 地址。
+| 问题 | 答案 |
+|---|---|
+| 能看到什么？ | 两把风扇的实时 RPM、当前固件性能模式原始代码和模式切换事件 |
+| 需要安装驱动吗？ | 不需要，不使用 PawnIO、WinIO 或 WinRing0 |
+| 为什么需要管理员授权？ | 已验证机器只允许 `SYSTEM` 调用厂商 WMI 方法；程序使用受限临时任务读取 |
+| 能控制风扇吗？ | 不能，写入接口被明确排除 |
+| 支持哪些机器？ | 目前只确认下表中的无界 14 2026 配置 |
+
+**[下载最新公开测试版](https://github.com/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor/releases)** · [提交兼容性报告](https://github.com/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor/issues/new?template=compatibility-report.yml) · [参与项目](CONTRIBUTING.md)
+
+## 兼容性
+
+| 机型 | 主板 | 平台 | BIOS | RPM | 性能模式 | 状态 |
+|---|---|---|---|---|---|---|
+| MECHREVO 无界 14 2026 | `WUJIE Series-Lark4-LNL` | Intel Lunar Lake | `EM_LNL326_V1.0.19` | 已验证 | 已验证原始代码与事件 | ✅ 实机验证 |
+| 其他机型或 BIOS | 未知 | 未知 | 未知 | 未验证 | 未验证 | ⚠️ 不应假定兼容 |
+
+如果你拥有相同或相近机型，欢迎提交经过脱敏的[兼容性报告](https://github.com/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor/issues/new?template=compatibility-report.yml)。程序检测不到对应 WMI 接口时应停止，不应尝试套用其他机型的 EC 地址。
+
+## 工作原理
+
+```mermaid
+flowchart LR
+    A[便携启动器] --> B[受限 SYSTEM 读取任务]
+    B --> C[厂商 BIOS WMI]
+    C --> D[GFNS：风扇 1/2 RPM]
+    C --> E[GPFM：性能模式代码]
+    F[OemWMIEvent：模式事件] --> B
+    B --> G[本地图形监视器]
+```
+
+只有固定的读取请求能到达工作进程；`SPFM`、`FanControl` 和直接 EC 写入均不在执行路径中。
 
 ## 功能
 
@@ -116,6 +144,7 @@ RPM = (highByte << 8) | lowByte
 - `fan_rpm_monitor.ps1`：管理员授权、临时任务管理和图形界面。
 - `fan_rpm_live_worker.ps1`：SYSTEM 上下文中的固定只读 WMI 请求和事件订阅。
 - `FAN_CONTROL_RESEARCH_NOTES.md`：未来风扇控制研究记录与风险边界。
+- `CONTRIBUTING.md`：兼容性报告、贡献要求和安全边界。
 - `scripts/build-release.ps1`：生成 Release ZIP 和 SHA-256 校验文件。
 
 ## 隐私与发布说明

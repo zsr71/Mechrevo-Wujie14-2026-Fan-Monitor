@@ -17,15 +17,43 @@
 
 This project reads actual dual-fan RPM and the current firmware performance-mode code on the MECHREVO WUJIE 14 2026 through the vendor BIOS WMI interface. It installs no EC-access driver and changes no fan or performance setting.
 
-Verified configuration:
+> [!IMPORTANT]
+> The current release is a **read-only monitor**, not a fan controller. It cannot set fan speed, fan curves, performance modes, or power limits.
 
-- Model: MECHREVO WUJIE 14 2026
-- Mainboard: `WUJIE Series-Lark4-LNL`
-- Platform: Intel Lunar Lake
-- BIOS: `EM_LNL326_V1.0.19`
-- OS: Windows 11 with Modern Standby
+## Understand it in 30 seconds
 
-Other models, board revisions, and BIOS versions have not been verified. If the expected WMI interface is unavailable, the program should stop instead of applying EC addresses from another machine.
+| Question | Answer |
+|---|---|
+| What can it show? | Live RPM for both fans, the raw firmware performance-mode code, and mode-switch events |
+| Does it install a driver? | No. It does not use PawnIO, WinIO, or WinRing0 |
+| Why does it request elevation? | The verified machine permits only `SYSTEM` to call the vendor WMI method, so a constrained temporary read task is used |
+| Can it control the fans? | No. All known write interfaces are explicitly excluded |
+| Which machines are supported? | Only the WUJIE 14 2026 configuration listed below is currently confirmed |
+
+**[Download the latest public preview](https://github.com/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor/releases)** · [Submit a compatibility report](https://github.com/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor/issues/new?template=compatibility-report.yml) · [Contribute](CONTRIBUTING.md)
+
+## Compatibility
+
+| Model | Mainboard | Platform | BIOS | RPM | Performance mode | Status |
+|---|---|---|---|---|---|---|
+| MECHREVO WUJIE 14 2026 | `WUJIE Series-Lark4-LNL` | Intel Lunar Lake | `EM_LNL326_V1.0.19` | Verified | Raw code and events verified | ✅ Tested on hardware |
+| Other models or BIOS versions | Unknown | Unknown | Unknown | Untested | Untested | ⚠️ Do not assume compatibility |
+
+If you own the same or a related model, a redacted [compatibility report](https://github.com/zsr71/Mechrevo-Wujie14-2026-Fan-Monitor/issues/new?template=compatibility-report.yml) is welcome. If the expected WMI interface is unavailable, the program should stop instead of applying EC addresses from another machine.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Portable launcher] --> B[Constrained SYSTEM read task]
+    B --> C[Vendor BIOS WMI]
+    C --> D[GFNS: fan 1/2 RPM]
+    C --> E[GPFM: performance-mode code]
+    F[OemWMIEvent: mode event] --> B
+    B --> G[Local graphical monitor]
+```
+
+Only fixed read requests are reachable in the worker. `SPFM`, `FanControl`, and direct EC writes are outside the execution path.
 
 ## Features
 
@@ -116,6 +144,7 @@ The worker must not contain:
 - `fan_rpm_monitor.ps1`: elevation, temporary-task lifecycle, and graphical monitor.
 - `fan_rpm_live_worker.ps1`: fixed read-only WMI requests and event subscription in the `SYSTEM` context.
 - `FAN_CONTROL_RESEARCH_NOTES.md`: findings and safety boundaries for possible future fan-control research.
+- `CONTRIBUTING.md`: compatibility reporting, contribution requirements, and safety boundaries.
 - `scripts/build-release.ps1`: builds the Release ZIP and SHA-256 checksum file.
 
 ## Privacy and publication

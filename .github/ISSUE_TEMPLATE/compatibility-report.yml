@@ -1,0 +1,87 @@
+name: "Compatibility report / 兼容性报告"
+description: "Report RPM and performance-mode results for a MECHREVO laptop / 报告机械革命笔记本读取结果"
+title: "[Compatibility] "
+labels: ["compatibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping map supported hardware. 感谢你帮助验证兼容性。
+
+        This project is read-only. Do not test fan-control or EC-write methods for this report.
+        本项目当前只读；请勿为了填写报告测试风扇控制或 EC 写入方法。
+
+  - type: input
+    id: model
+    attributes:
+      label: "Laptop model / 笔记本型号"
+      placeholder: "MECHREVO WUJIE 14 2026"
+    validations:
+      required: true
+
+  - type: input
+    id: mainboard
+    attributes:
+      label: "Mainboard / 主板型号"
+      description: "You can obtain this from System Information or `Get-CimInstance Win32_BaseBoard`."
+      placeholder: "WUJIE Series-Lark4-LNL"
+    validations:
+      required: true
+
+  - type: input
+    id: bios
+    attributes:
+      label: "BIOS version / BIOS 版本"
+      placeholder: "EM_LNL326_V1.0.19"
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: "Windows and Release version / Windows 与程序版本"
+      placeholder: "Windows 11 24H2; v0.1.0-alpha.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: rpm-result
+    attributes:
+      label: "RPM result / RPM 结果"
+      options:
+        - "Both fan values look reasonable / 两把风扇数值合理"
+        - "WMI interface was not found / 找不到 WMI 接口"
+        - "Launch or access failed / 启动或访问失败"
+        - "Values were zero or unreasonable / 数值为零或明显不合理"
+        - "Other / 其他"
+    validations:
+      required: true
+
+  - type: textarea
+    id: readings
+    attributes:
+      label: "Observed readings / 观察结果"
+      description: "Include idle/load RPM and raw performance-mode codes if available."
+      placeholder: |
+        Idle: Fan 1 ... RPM, Fan 2 ... RPM
+        Load: Fan 1 ... RPM, Fan 2 ... RPM
+        Mode codes/events: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Redacted log or error / 脱敏日志或错误"
+      description: "Remove usernames, product keys, tokens, and unrelated hardware identifiers."
+      render: shell
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: "Safety confirmation / 安全确认"
+      options:
+        - label: "I used an unmodified official Release or the repository's read-only scripts. / 我使用未修改的官方 Release 或仓库只读脚本。"
+          required: true
+        - label: "I removed private data and did not test EC-write or fan-control methods. / 我已删除隐私信息，且未测试 EC 写入或风扇控制方法。"
+          required: true

@@ -45,6 +45,7 @@ $releaseFiles = @(
     'fan_rpm_live_worker.ps1',
     'README.md',
     'README.en.md',
+    'CONTRIBUTING.md',
     'LICENSE',
     'CHANGELOG.md',
     'SECURITY.md',
